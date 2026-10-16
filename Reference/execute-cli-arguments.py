@@ -1,15 +1,16 @@
-import sys
-# get the arguments
-n = len(sys.argv)
-# get the total number of arguments
-print("Total number arguments passed:", n)
-# the zeroth list element is the name of the script
-print("\nName of the script:", sys.argv[0])
-# dump all the arguments passed to the script
-print("\nArguments passed to the script:", end = " ")
-for i in range(1, n):
-    print(sys.argv[i], end = " ")
-    if(mode=="--option"):
-        # an option that accepts a command line argument
-        print(sys.argv[i]+" "+sys.argv[i+1], end = " ")
-            
+#!/usr/bin/python3
+
+import argparse
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-c','--count', type=int, help="number of values to count")
+    parser.add_argument('-s','--string', type=str, help="string to read")
+
+    args = parser.parse_args()
+
+    print(args.string[0:args.count])
+
+
+if __name__ == "__main__":
+    main()
