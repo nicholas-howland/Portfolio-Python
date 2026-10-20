@@ -21,7 +21,7 @@ def main():
     t = AsyncSniffer(filter="(tcp or udp) and ((dst "+args.target+") or (src "+args.target+"))")
     t.start()
 
-## put a happy little sleep here so we know the sniffer started'a sniffin
+## put a happy little sleep here so the sniffer can start
     sleep(1)
 
     if(args.protocol=="tcp"):
@@ -33,7 +33,7 @@ def main():
             p = IP(dst=args.target)/ UDP( dport=int(args.port) , sport = randint(49152,65535))        
             send(p,verbose=False)
 
-    ## put a slightly longer sleep but just as happy seeep here so we get returns from the packets sent
+    ## put a slightly longer sleep but just as happy sleep here so we get returns from the packets sent
     time.sleep(3)
 
     ## Stop the sniffer
