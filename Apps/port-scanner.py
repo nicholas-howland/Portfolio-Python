@@ -15,6 +15,7 @@ def main():
     parser.add_argument('-c','--count', required=False, default=3, type=int, help="Number of packets to send")
     parser.add_argument('-f','--flags', choices = ["SA","S"],required=False, default="S", type=str, help="Flags to send on a TCP scan")
     parser.add_argument('-i','--interface', required=False, type=str, help="Interface to use for scanning")
+    parser.add_argument('-v','--verbose',required=False,action=argparse.BooleanOptionalAction,default=False,type=bool, help="Be verbose and output all IPID's in the packet not just the summary")
     args = parser.parse_args()
 
 ## start an async sniffer so we can see what happened durring the scan0
@@ -41,7 +42,7 @@ def main():
 
     ## Stop the sniffer
     pc = t.stop()
-
+    results = []
     sessions = pc.sessions()
 ## prints out all packets sent
     print("IP Address:Port  TCP Flags")
@@ -51,12 +52,20 @@ def main():
 #            print(i)
             if(args.protocol=="tcp"):
                 if(args.target == i["IP"].src and args.port == i["TCP"].sport):
-                    if(str(i["TCP"])):
+                    if(args.verbose):
                         print(str(i["IP"].src)+":"+str(i["IP"].sport)+" "+str(i["TCP"].flags))
+                    elif( str(i["IP"].src)+":"+str(i["IP"].sport)+" "+str(i["TCP"].flags) not in results ):
+                        results.append(str(i["IP"].src)+":"+str(i["IP"].sport)+" "+str(i["TCP"].flags))
             if(args.protocol=="udp"):
                 if(args.target == i["IP"].src and args.port == i["TCP"].sport):
-                    print(str(i["IP"].src)+":"+str(i["IP"].sport)+str(i["UDP"].show()))
+                    if(args.verbose):
+                        print(str(i["IP"].src)+":"+str(i["IP"].sport)+str(i["UDP"].show()))
+                    elif( str(i["IP"].src)+":"+str(i["IP"].sport)+" "+str(i["UDP"].flags) not in results ):
+                        results.append(str(i["IP"].src)+":"+str(i["IP"].sport)+" "+str(i["UDP"].flags))
 
+
+    for i in results:
+        print(i)
 
 if __name__ == "__main__":
     main()
