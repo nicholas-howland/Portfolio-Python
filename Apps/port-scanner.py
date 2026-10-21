@@ -20,9 +20,9 @@ def main():
 
 ## start an async sniffer so we can see what happened durring the scan0
     if(args.interface=="UNSET"):
-        t = AsyncSniffer(filter="(tcp or icmp) and ((dst "+args.target+") or (src "+args.target+"))")
+        t = AsyncSniffer(filter="(tcp or udp) and ((dst "+args.target+") or (src "+args.target+"))")
     else:
-        t = AsyncSniffer(filter="(tcp or icmp) and ((dst "+args.target+") or (src "+args.target+"))",iface=args.interface)
+        t = AsyncSniffer(filter="(tcp or udp) and ((dst "+args.target+") or (src "+args.target+"))",iface=args.interface)
     t.start()
 
 ## put a happy little sleep here so the sniffer can start
