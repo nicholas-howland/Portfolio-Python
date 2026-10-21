@@ -14,11 +14,14 @@ def main():
     parser.add_argument('-p','--port', required=True, type=int, help="Port to scan")
     parser.add_argument('-c','--count', required=False, default=3, type=int, help="Number of packets to send")
     parser.add_argument('-f','--flags', choices = ["SA","S"],required=False, default="S", type=str, help="Flags to send on a TCP scan")
-
+    parser.add_argument('-i','--interface', required=False, type=str, help="Interface to use for scanning")
     args = parser.parse_args()
 
 ## start an async sniffer so we can see what happened durring the scan0
-    t = AsyncSniffer(filter="(tcp or udp) and ((dst "+args.target+") or (src "+args.target+"))")
+    if(args.interface=="UNSET"):
+        t = AsyncSniffer(filter="(tcp or icmp) and ((dst "+args.target+") or (src "+args.target+"))")
+    else:
+        t = AsyncSniffer(filter="(tcp or icmp) and ((dst "+args.target+") or (src "+args.target+"))",iface=args.interface)
     t.start()
 
 ## put a happy little sleep here so the sniffer can start
